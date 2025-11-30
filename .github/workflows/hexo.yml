@@ -1,0 +1,35 @@
+name: Deploy Hexo Blog to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'blog/**'               # 只有 blog/ 下变动才触发
+      - '.github/workflows/hexo.yml'  # 允许更新 workflow 时触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Pull custom Hexo build image
+        run: docker pull zjykzj/hexo-env:latest
+
+      - name: Generate static files using Docker
+        run: |
+          docker run --rm \
+            -v "$PWD/blog:/workspace" \
+            -w /workspace \
+            zjykzj/hexo-env:latest \
+            npm run dev
+
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./blog/public
+          publish_branch: gh-pages
+          force_orphan: true   # 仅保留静态文件，无 Git 历史（推荐）
