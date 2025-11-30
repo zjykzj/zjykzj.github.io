@@ -1,16 +1,29 @@
-name: Deploy Hexo Blog to GitHub Pages
+# .github/workflows/hexo.yml
+name: Build and Deploy Hexo Blog to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: ["main"]
     paths:
       - 'blog/**'
       - '.github/workflows/hexo.yml'
+  workflow_dispatch:  # 允许手动触发
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -18,7 +31,7 @@ jobs:
       - name: Pull custom Hexo build image
         run: docker pull zjykzj/hexo-env:latest
 
-      - name: Install dependencies and generate static files
+      - name: Generate static files with Docker
         run: |
           docker run --rm \
             -v "$PWD/blog:/workspace" \
@@ -26,10 +39,14 @@ jobs:
             zjykzj/hexo-env:latest \
             bash -c "npm install && hexo generate"
 
-      - name: Deploy to gh-pages branch
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact (only public/)
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./blog/public
-          publish_branch: gh-pages
-          force_orphan: true
+          path: ./blog/public   # 👈 关键：只上传生成的静态文件
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
