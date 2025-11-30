@@ -39,6 +39,9 @@ jobs:
             zjykzj/hexo-env:latest \
             bash -c "npm install && hexo generate"
 
+      - name: "Debug: list generated files"
+        run: ls -R ./blog/public
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
