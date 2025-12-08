@@ -112,3 +112,11 @@ abbrlink:
   drafts: false   # Whether to generate abbrlink for drafts. (false in default)
   force: false    # Enable force mode. In this mode, the plugin will ignore the cache, and calc the abbrlink for every post even it already had an abbrlink. (false in default)
   writeback: true # Whether to write changes to front-matters back to the actual markdown files. (true in default)
+
+# 启用 hexo-filter-mathjax 全局处理
+mathjax:
+  every_page: true
+  # 可选：启用行内公式 $...$
+  single_dollars: true
+  # 可选：自动注入 CSS
+  append_css: true
