@@ -189,17 +189,8 @@ links_settings:
 
 links:
   #Title: https://example.com
-  # 腾讯云: https://cloud.tencent.com
-  阿里云: https://www.aliyun.com
-  LangChain: https://github.com/langchain-ai
-  # COZE: https://www.coze.cn/
-  OpenAI: https://platform.openai.com/docs/overview
-  OpenCV: https://opencv.org/
-  # Ollama: https://ollama.com/
-  PyTorch: https://pytorch.org/
-  QwenLM: https://github.com/QwenLM
-  # ModelScope: https://modelscope.cn/home
-  Ultralytics: https://github.com/ultralytics
+  Hexo: https://hexo.io/zh-cn/
+  NexT: https://theme-next.js.org/
 
 # Table of Contents in the Sidebar
 # Front-matter variable (nonsupport wrap expand_all).
